@@ -6,6 +6,7 @@ import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
+import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -64,14 +65,14 @@ public class SocketWrapper {
                         true);
 
                 // replace input/output streams
-                readStream = new DataInputStream(sslSocket.getInputStream());
+                readStream = new DataInputStream(new BufferedInputStream(sslSocket.getInputStream()));
                 writeStream = sslSocket.getOutputStream();
 
                 // execute SSL handshake
                 sslSocket.startHandshake();
             } else {
                 writeStream = socket.getOutputStream();
-                readStream = new DataInputStream(socket.getInputStream());
+                readStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
             }
 
             // execute RethinkDB handshake
